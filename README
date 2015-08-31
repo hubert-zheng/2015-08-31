@@ -1,0 +1,3 @@
+﻿在src\main\java\ApplicationContext.xml里修改数据库配置信息
+mvn compile
+mvn exec:java -Dexec.mainClass="com.hand.Handtest0831.App"

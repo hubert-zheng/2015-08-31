@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2015-8-31 18:41:51 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="com.hand.Emptity.Store" table="store" catalog="sakila">
+        <id name="storeId" type="java.lang.Byte">
+            <column name="store_id" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="address" class="com.hand.Emptity.Address" fetch="select">
+            <column name="address_id" not-null="true" />
+        </many-to-one>
+        <property name="managerStaffId" type="byte">
+            <column name="manager_staff_id" not-null="true" unique="true" />
+        </property>
+        <property name="lastUpdate" type="timestamp">
+            <column name="last_update" length="19" not-null="true" />
+        </property>
+        <set name="customers" table="customer" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="store_id" not-null="true" />
+            </key>
+            <one-to-many class="com.hand.Emptity.Customer" />
+        </set>
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd ">
+
+
+	<!-- Initialization for data source -->
+	<bean id="dataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+		<property name="url" value="jdbc:mysql://localhost:3306/sakila" />
+		<property name="username" value="root" />
+		<property name="password" value="tflzzn4112" />
+	</bean>
+
+	<!-- Definition for studentJDBCTemplate bean <bean id="CusJDBCTemplate" 
+		class="com.hand.Handtest0831.CusJDBCTemplate"> <property name="dataSource" 
+		ref="dataSource" /> </bean> -->
+	<!-- 配置sessionFactory -->
+	<bean id="myIntercept"  class="com.hand.Handtest0831.MyInterceptor">  </bean>
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean"
+		lazy-init="false">
+		<!--//注入datasource，给sessionfactoryBean内setdatasource提供数据源 -->
+		<property name="dataSource">
+			<ref bean="dataSource" />
+		</property>
+		<!-- 配置拦截器 -->
+		<property name="entityInterceptor">    
+            <ref bean="myIntercept"/>  
+        </property>  
+		
+		<!--//加载实体类的配置文件 -->
+		<property name="mappingResources">
+			<list>
+				<value>com/hand/Emptity/Customer.hbm.xml</value>
+				<value>com/hand/Emptity/Address.hbm.xml</value>
+				<value>com/hand/Emptity/City.hbm.xml</value>
+				<value>com/hand/Emptity/Country.hbm.xml</value>
+				<value>com/hand/Emptity/Store.hbm.xml</value>
+			</list>
+		</property>
+		<!--//设置hibernate的属性，相当于hibernate.cfg.xml中的设置属性 -->
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">org.hibernate.dialect.SQLServerDialect</prop>
+				<prop key="hbm2ddl.auto">update</prop>
+				<prop key="hibernate.show_sql">true</prop>
+			</props>
+		</property>
+	</bean>
+	
+	<!-- sessionfactory注入 -->
+	<bean id="CusJDBCTemplate" class="com.hand.Handtest0831.CusJDBCTemplate" lazy-init="false">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	<bean id="AddressFactory" class="com.hand.Handtest0831.AddressFactory" lazy-init="false">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	
+
+
+</beans>
+	   
